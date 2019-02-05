@@ -16,3 +16,14 @@ export const fetchProducts = () => async (dispatch) => {
         payload: response.data
     });
 }
+
+export const addPoints = () => async (dispatch) => {
+    const body = {
+        'amount': 1000
+      };
+    const response = await apiary.post('/user/points',body);
+    dispatch({
+        type: 'ADD_POINTS',
+        payload: response.data
+    });
+}

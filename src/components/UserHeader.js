@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchUser } from '../actions/index';
+import { fetchUser, addPoints } from '../actions/index';
 
 class UserHeader extends React.Component {
     
@@ -8,6 +8,14 @@ class UserHeader extends React.Component {
         this.props.fetchUser();
     }
     
+    renderAddPoints() {
+        return (
+            <div>
+                <button onClick={() => {this.props.addPoints()}}>Agregar Puntos</button>
+            </div>
+        );
+    }
+
     renderUser(){
         const user = this.props.user[0];
         //console.log(user);
@@ -28,6 +36,7 @@ class UserHeader extends React.Component {
         return(
             <div>
                 {this.renderUser()}
+                {this.renderAddPoints()}
             </div>
         )
     }
@@ -35,11 +44,14 @@ class UserHeader extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.user,
     };
 }
 
 export default connect(
     mapStateToProps,
-    { fetchUser : fetchUser}
+    { 
+        fetchUser : fetchUser,
+        addPoints : addPoints
+    }
     )(UserHeader);

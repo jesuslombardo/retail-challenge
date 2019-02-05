@@ -4,13 +4,12 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../actions';
 
-
 class ProductList extends React.Component {
     state = {'currentPage' : 0, 'sorting' : null};
 
     componentDidMount(){
         this.props.fetchProducts();
-    }
+    }   
 
     paginate(elements, perPage){
         const paginatedElements = [];
@@ -32,13 +31,11 @@ class ProductList extends React.Component {
     }
 
     lowerPrice = () => {
-        const products = _.orderBy(this.props.products, ['cost'],['asc']);
-        return products;
+        return _.orderBy(this.props.products, ['cost'],['asc']);
     }
 
     highest = () => {
-        const products = _.orderBy(this.props.products, ['cost'],['desc']);
-        return products
+        return _.orderBy(this.props.products, ['cost'],['desc']);
     }
 
 
