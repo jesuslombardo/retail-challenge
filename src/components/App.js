@@ -1,20 +1,17 @@
 import React from 'react';
 
 import UserHeader from './UserHeader';
+import ProductList from './ProductList';
 
 class App extends React.Component {
     render(){
-        return(
+        return (
             <div>
                 <UserHeader />
-
+                <ProductList perPage={16} />
             </div>
         );
     }
 }
 
 export default App;
-
-/*
-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YzU0M2U1Njc0MjNlYzAwNmUyODIxOWQiLCJpYXQiOjE1NDkwMjQ4NTR9.GyIhCDIGpgQoU0-HQLqS4XXMfVUnpJGJwexLxZuuRKE
-*/
