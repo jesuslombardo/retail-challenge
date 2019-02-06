@@ -3,7 +3,10 @@ export default (state = [], action) => {
         case 'FETCH_USER':
             return [...state, action.payload]
         case 'ADD_POINTS':
-            return [...state, action.payload]
+            return state.map(function(user){
+                user.points = action.payload["New Points"];
+                return user;
+            })
         default:
             return state;
     }

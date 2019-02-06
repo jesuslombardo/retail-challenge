@@ -17,11 +17,12 @@ export const fetchProducts = () => async (dispatch) => {
     });
 }
 
-export const addPoints = () => async (dispatch) => {
+export const addPoints = () => async (dispatch, getState) => {
     const body = {
         'amount': 1000
       };
     const response = await apiary.post('/user/points',body);
+    
     dispatch({
         type: 'ADD_POINTS',
         payload: response.data

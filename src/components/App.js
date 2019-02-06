@@ -1,14 +1,15 @@
 import React from 'react';
 
 import UserHeader from './UserHeader';
-import ProductList from './ProductList';
+import SortProduct from './SortProduct';
 
 class App extends React.Component {
     render(){
         return (
             <div>
                 <UserHeader />
-                <ProductList perPage={16} />
+                <SortProduct perPage={16}/>
+                
             </div>
         );
     }
