@@ -1,11 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
 import ProductList from './ProductList';
 import { connect } from 'react-redux';
-import { fetchProducts } from '../actions';
+import { fetchProducts, getLowerProducts, getHighestProducts } from '../actions';
 
 class SortProduct extends React.Component {
-    state = {'currentPage' : 0, 'sorting' : null, products : []};
 
     componentDidMount(){
         this.props.fetchProducts();
@@ -19,49 +17,15 @@ class SortProduct extends React.Component {
         this.setState({'currentPage' : this.state.currentPage - 1});
     }
 
-    lowerPrice = () => {
-        return _.orderBy(this.props.products, ['cost'],['asc']);
-    }
+    
 
-    highest = () => {
-        return _.orderBy(this.props.products, ['cost'],['desc']);
-    }
-
-    paginate(elements, perPage){
-        const paginatedElements = [];
-        const totalElements = elements.length;
-        const cuts = Math.ceil(totalElements / perPage);
-
-        for(let i = 0; i < cuts; i++){
-            paginatedElements.push(elements.slice(i*perPage,(i+1)*perPage));
-        }
-        return paginatedElements;
-        //this.setState({'products': paginatedElements});
-    }
-
-    checkSort = () => {
-        switch(this.state.sorting){
-            case 'lower':
-                console.log("Ordering by Lower");
-                return this.lowerPrice();
-            case 'highest':
-                console.log("Ordering by Highest");
-                return this.highest();
-            default:
-                console.log("Ordering by Recent");
-                return this.props.products;
-        }
-    }
+    
 
     showNavigationButtons = (fragmentedProducts) => {
         //console.log(fragmentedProducts)
         const pages = fragmentedProducts.length - 1 ; //resto la página actual
         
-        let buttons = [
-            <button key="recent" onClick={() => {this.setState({'currentPage' : 0, 'sorting' : "recent"})}}>Recientes</button>,
-            <button key="lower" onClick={() => {this.setState({'currentPage' : 0, 'sorting' : "lower"})}}>>Lowest Price</button>,
-            <button key="highest" onClick={() => {this.setState({'currentPage' : 0, 'sorting' : "highest"})}}>>Highest Price</button>
-        ];
+        let buttons = [];
 
         if(pages > this.state.currentPage){
             buttons = [...buttons, <button onClick={this.nextPage} key="next">Next</button>];
@@ -77,35 +41,42 @@ class SortProduct extends React.Component {
             </div>
         );
     }
-
+    
     render(){
 
-        if(this.props.products.length === 0){
+        if(Object.keys(this.props.products).length === 0){
             console.log("Loading products..");
             return null;
         }
+
+        const currentPage = 0;
+        const pageProducts = this.props.products.paginatedProducts[currentPage]
         
-        const products = this.checkSort(); //devuelve los elementos ordenados por el sortBy
-        
-        const fragmentedProducts = this.paginate(products, this.props.perPage); //los splicea para mostrar en paginas
         
         return(
-
-            
             <div>
-                <h2>Navigation:</h2>
-                {this.showNavigationButtons(fragmentedProducts)}
-                <ProductList products={fragmentedProducts} currentPage={this.state.currentPage} />
+                <hr/>
+                    {/*this.showNavigationButtons(fragmentedProducts)*/}
+                    <button onClick={this.props.fetchProducts}>Recientes</button>
+                    <button onClick={this.props.getLowerProducts}>>Lowest Price</button>
+                    <button onClick={this.props.getHighestProducts}>>Highest Price</button>
+                    <ProductList products={pageProducts} currentPage={0} />
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    return { products : state.products};
+    return { 
+        products : state.products
+    };
 }
 
 export default connect(
     mapStateToProps,
-    { fetchProducts : fetchProducts}
+    { 
+        fetchProducts : fetchProducts,
+        getLowerProducts: getLowerProducts,
+        getHighestProducts: getHighestProducts,
+    }
     )(SortProduct);

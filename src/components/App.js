@@ -8,7 +8,7 @@ class App extends React.Component {
         return (
             <div>
                 <UserHeader />
-                <SortProduct perPage={16}/>
+                <SortProduct perPage={8}/>
                 
             </div>
         );

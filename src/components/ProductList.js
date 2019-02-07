@@ -4,7 +4,8 @@ const ProductList = (props) => {
 
     const renderList = () => {
         //console.log("Rendering products");
-        return props.products[props.currentPage].map(product => {
+        //return props.products[props.currentPage].map(product => {
+            return props.products.map(product => {
             return(
                 <li key={product._id} style={{'border' : '2px solid red', 'display':'inline-block', 'width' : '20%'}}>
                     <h3>{product.name}</h3>
