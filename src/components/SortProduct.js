@@ -1,66 +1,51 @@
 import React from 'react';
 import ProductList from './ProductList';
 import { connect } from 'react-redux';
-import { fetchProducts, getLowerProducts, getHighestProducts } from '../actions';
+import { fetchProducts, getLowerProducts, getHighestProducts, nextPage, prevPage, setRedeem } from '../actions';
 
 class SortProduct extends React.Component {
 
     componentDidMount(){
-        this.props.fetchProducts();
+        this.props.fetchProducts(this.props.perPage);
     }  
 
-    nextPage = () => {
-        this.setState({'currentPage' : this.state.currentPage + 1});
-    }
-
-    previousPage = () => {
-        this.setState({'currentPage' : this.state.currentPage - 1});
-    }
-
-    
-
-    
-
-    showNavigationButtons = (fragmentedProducts) => {
-        //console.log(fragmentedProducts)
-        const pages = fragmentedProducts.length - 1 ; //resto la página actual
+    renderNavigationButtons(){
+        const buttons = [];
         
-        let buttons = [];
-
-        if(pages > this.state.currentPage){
-            buttons = [...buttons, <button onClick={this.nextPage} key="next">Next</button>];
-        }
-        
-        if(pages <= this.state.currentPage){
-            buttons =  [...buttons, <button onClick={this.previousPage} key="previous">Previous</button>];
+        if(this.props.products.currentPage > 0){
+            buttons.push(<button key="b" onClick={this.props.prevPage}>>Prev Page</button>);
         }
 
-        return (
+        if(this.props.products.numPages > this.props.products.currentPage + 1){
+            buttons.push(<button key="a" onClick={this.props.nextPage}>>Next Page</button>);
+        }
+
+        return(
             <div>
                 {buttons}
             </div>
         );
     }
-    
-    render(){
 
+    redeem = (product) => {
+        this.props.setRedeem(product);
+    }
+
+    render(){
         if(Object.keys(this.props.products).length === 0){
-            console.log("Loading products..");
             return null;
         }
 
-        const currentPage = 0;
-        const pageProducts = this.props.products.paginatedProducts[currentPage]
-        
-        
+        const pageProducts = this.props.products.paginatedProducts[this.props.products.currentPage]
+
         return(
             <div>
                 <hr/>
-                    {/*this.showNavigationButtons(fragmentedProducts)*/}
-                    <button onClick={this.props.fetchProducts}>Recientes</button>
+                    <button onClick={() => {this.props.fetchProducts(this.props.perPage)}}>Recientes</button>
                     <button onClick={this.props.getLowerProducts}>>Lowest Price</button>
                     <button onClick={this.props.getHighestProducts}>>Highest Price</button>
-                    <ProductList products={pageProducts} currentPage={0} />
+                    {this.renderNavigationButtons()}
+                    <ProductList products={pageProducts} redeem={this.redeem} user={this.props.user}/>
             </div>
         );
     }
@@ -68,7 +53,8 @@ class SortProduct extends React.Component {
 
 const mapStateToProps = (state) => {
     return { 
-        products : state.products
+        products : state.products,
+        user : state.user
     };
 }
 
@@ -78,5 +64,8 @@ export default connect(
         fetchProducts : fetchProducts,
         getLowerProducts: getLowerProducts,
         getHighestProducts: getHighestProducts,
+        nextPage : nextPage,
+        prevPage: prevPage,
+        setRedeem: setRedeem
     }
     )(SortProduct);

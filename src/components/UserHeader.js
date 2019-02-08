@@ -17,8 +17,7 @@ class UserHeader extends React.Component {
     }
 
     renderUser(){
-        const user = this.props.user[0];
-        //console.log(user);
+        const user = this.props.user;
         return (
             <div>
                 {user.name}

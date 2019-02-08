@@ -1,16 +1,15 @@
 import React from 'react';
 
 const ProductList = (props) => {
-
-    const renderList = () => {
-        //console.log("Rendering products");
-        //return props.products[props.currentPage].map(product => {
-            return props.products.map(product => {
+    
+    const renderList = () => { 
+        return props.products.map(product => {
             return(
                 <li key={product._id} style={{'border' : '2px solid red', 'display':'inline-block', 'width' : '20%'}}>
                     <h3>{product.name}</h3>
                     <p>{product.cost} | {product.category}</p>
                     <img src={product.img.url} alt={product.name} />
+                    {props.user.points >= product.cost ? <button onClick={() => {props.redeem(product)}}>Redeem</button> : `Te Faltan ${product.cost - props.user.points} Monedas`}
                 </li>
             );
         });
@@ -25,7 +24,6 @@ const ProductList = (props) => {
 
         </div>
     );
-    
 }
 
 export default ProductList;
